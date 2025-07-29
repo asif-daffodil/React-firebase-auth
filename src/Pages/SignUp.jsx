@@ -10,7 +10,7 @@ const SignUp = () => {
     const auth = getAuth(app);
     const [_user, _loading, _error] = useAuthState(auth);
     const [signInWithGoogle] = useSignInWithGoogle(auth);
-    const [createUserWithEmailAndPassword,] = useCreateUserWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +31,10 @@ const SignUp = () => {
             <div className="mb-6">
                 <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
                 <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" {...register('email', {
-                    required: true,
+                    required: {
+                        value: true,
+                        message: "Email is required"
+                    },
                     pattern: {
                         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                         message: "Invalid email address"
@@ -42,7 +45,10 @@ const SignUp = () => {
             <div className="mb-6">
                 <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                 <input type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" {...register('password', {
-                    required: true,
+                    required: {
+                        value: true,
+                        message: "Password is required"
+                    },
                     minLength: {
                         value: 6,
                         message: "Password must be at least 6 characters"
