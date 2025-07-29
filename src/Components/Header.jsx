@@ -1,12 +1,13 @@
 import { getAuth } from 'firebase/auth';
 import app from '../firebase';
-import { useSignOut } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { NavLink, useNavigate } from 'react-router';
 
 const Header = () => {
     const auth = getAuth(app);
     const [signOut] = useSignOut(auth);
     const navigate = useNavigate();
+    const [user] = useAuthState(auth);
     const handleSignOut = () => {
         signOut().then(() => {
             navigate('/sign-in');
@@ -32,23 +33,30 @@ const Header = () => {
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <li>
-                            <NavLink to="/" className={({isActive}) => isActive ? active:inActive} aria-current="page">Home</NavLink>
+                            <NavLink to="/" className={({ isActive }) => isActive ? active : inActive} aria-current="page">Home</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/about" className={({isActive}) => isActive ? active:inActive}>About</NavLink>
+                            <NavLink to="/about" className={({ isActive }) => isActive ? active : inActive}>About</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/contact" className={({isActive}) => isActive ? active:inActive}>Contact</NavLink>
+                            <NavLink to="/contact" className={({ isActive }) => isActive ? active : inActive}>Contact</NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/sign-up" className={({isActive}) => isActive ? active:inActive}>Sign up</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/sign-in" className={({isActive}) => isActive ? active:inActive}>Sign In</NavLink>
-                        </li>
-                        <li>
-                            <button className="cursor-pointer hover:text-blue-700" onClick={() => handleSignOut()}>Log out</button>
-                        </li>
+                        {!user && (
+                            <>
+                                <li>
+                                    <NavLink to="/sign-up" className={({ isActive }) => isActive ? active : inActive}>Sign up</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/sign-in" className={({ isActive }) => isActive ? active : inActive}>Sign In</NavLink>
+                                </li>
+                            </>
+                        )}
+                        {user && (
+                            <li>
+                                <button className="cursor-pointer hover:text-blue-700" onClick={() => handleSignOut()}>Log out {user.displayName} </button>
+                            </li>
+                        )}
+
                     </ul>
                 </div>
             </div>
